@@ -1,9 +1,9 @@
-// public/yourMapScript.js
+//CentroSalud data import
 import data from './centroGeneralSalud.js';
 
 console.log(data);
 
-const markerTitle = "UNGS - Universidad Nacional de General Sarmiento";
+const centroSaludA = data.zonas[0].centros_salud[0].nombre;
 const latlngs = [
   [-34.541, -58.773],
   [-34.486, -58.773],
@@ -22,9 +22,8 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Draggable marker
 const marker = L.marker([-34.52211, -58.70059], {
   draggable: "true",
-  title: markerTitle
 }).addTo(map)
-  .bindPopup(markerTitle)
+  .bindPopup(centroSaludA)
   .openPopup();
 
 // Add polygon

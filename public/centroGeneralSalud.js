@@ -9,7 +9,7 @@ const data = {
             "atencion": {
               "nombre": "Juan Pérez",
               "fecha": "2024-10-30",
-              "boolean": true
+              "completoEncuesta": false
             }
           },
           {
@@ -18,7 +18,7 @@ const data = {
             "atencion": {
               "nombre": "María Gómez",
               "fecha": "2024-10-29",
-              "boolean": false
+              "completoEncuesta": false
             }
           },
           {
@@ -27,7 +27,7 @@ const data = {
             "atencion": {
               "nombre": "Carlos López",
               "fecha": "2024-10-28",
-              "boolean": true
+              "completoEncuesta": false
             }
           }
         ]
@@ -41,7 +41,7 @@ const data = {
             "atencion": {
               "nombre": "Ana Martínez",
               "fecha": "2024-10-27",
-              "boolean": true
+              "completoEncuesta": false
             }
           },
           {
@@ -50,7 +50,7 @@ const data = {
             "atencion": {
               "nombre": "Luis Fernández",
               "fecha": "2024-10-26",
-              "boolean": false
+              "completoEncuesta": false
             }
           },
           {
@@ -59,7 +59,7 @@ const data = {
             "atencion": {
               "nombre": "Laura Ríos",
               "fecha": "2024-10-25",
-              "boolean": true
+              "completoEncuesta": false
             }
           }
         ]
@@ -73,7 +73,7 @@ const data = {
             "atencion": {
               "nombre": "Pedro Ortega",
               "fecha": "2024-10-24",
-              "boolean": false
+              "completoEncuesta": false
             }
           },
           {
@@ -82,7 +82,7 @@ const data = {
             "atencion": {
               "nombre": "Gloria Sánchez",
               "fecha": "2024-10-23",
-              "boolean": true
+              "completoEncuesta": false
             }
           },
           {
@@ -91,7 +91,7 @@ const data = {
             "atencion": {
               "nombre": "Jorge Medina",
               "fecha": "2024-10-22",
-              "boolean": false
+              "completoEncuesta": false
             }
           }
         ]

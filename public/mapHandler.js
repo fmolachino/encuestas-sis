@@ -4,6 +4,7 @@ import data from './centroGeneralSalud.js';
 // Inicializar el mapa
 const map = L.map('map').setView([-34.52211, -58.70059], 16);
 
+// Agregar capa de mapa
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
   attribution: ''
@@ -53,6 +54,7 @@ window.openDetailModal = function(centerName) {
   const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
   detailModal.show();
 
+  // Eliminar el modal del DOM al cerrarlo
   document.getElementById('detailModal').addEventListener('hidden.bs.modal', function () {
     this.remove();
   });
@@ -79,6 +81,9 @@ window.openSurveyPopup = function(centerName) {
                     `).join('')}
                   </div>
                   <input type="hidden" id="question${index + 1}" name="question${index + 1}" required />
+                  <span class="rating-reference">
+                    ${getRatingReference(index + 1)}
+                  </span>
                 </div>
               `).join('')}
               <button type="submit" class="btn btn-primary">Enviar</button>
@@ -100,9 +105,27 @@ window.openSurveyPopup = function(centerName) {
     closePopup('surveyModal');
   };
 
+  // Eliminar el modal del DOM al cerrarlo
   document.getElementById('surveyModal').addEventListener('hidden.bs.modal', function () {
     this.remove();
   });
+}
+
+// Función para obtener la referencia de calificación
+function getRatingReference(questionNumber) {
+  const references = [
+    '1 - Mucho tiempo, 10 - Muy poco tiempo',
+    '1 - Muy insatisfecho, 10 - Muy satisfecho',
+    '1 - Muy baja disponibilidad, 10 - Muy alta disponibilidad',
+    '1 - Definitivamente no, 10 - Definitivamente sí',
+    '1 - Muy mala experiencia, 10 - Excelente experiencia',
+    '1 - Muy difícil, 10 - Muy fácil',
+    '1 - Muy ineficaz, 10 - Muy eficaz',
+    '1 - Muy desorganizado, 10 - Muy organizado',
+    '1 - Muy poco conocimiento, 10 - Muy bien informado',
+    '1 - Muy malo, 10 - Excelente'
+  ];
+  return references[questionNumber - 1];
 }
 
 // Función para seleccionar la calificación

@@ -13,3 +13,17 @@
     object-fit: cover; /* Ajusta la imagen para que se vea bien dentro del contenedor */
   }
   
+  .rating {
+    display: flex;
+  }
+  
+  .star {
+    font-size: 26.4px;
+    color: #ccc;
+    cursor: pointer;
+  }
+  
+  .star.selected {
+    color: gold; /* Color de las estrellas seleccionadas */
+  }
+  

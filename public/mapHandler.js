@@ -54,7 +54,6 @@ window.openDetailModal = function(centerName) {
   const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
   detailModal.show();
 
-  // Eliminar el modal del DOM al cerrarlo
   document.getElementById('detailModal').addEventListener('hidden.bs.modal', function () {
     this.remove();
   });
@@ -87,7 +86,7 @@ window.openSurveyPopup = function(centerName) {
                 </div>
               `).join('')}
               <button type="submit" class="btn btn-primary">Enviar</button>
-              <button type="button" class="btn btn-secondary" onclick="closePopup('surveyModal')">Cerrar</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </form>
           </div>
         </div>
@@ -105,7 +104,6 @@ window.openSurveyPopup = function(centerName) {
     closePopup('surveyModal');
   };
 
-  // Eliminar el modal del DOM al cerrarlo
   document.getElementById('surveyModal').addEventListener('hidden.bs.modal', function () {
     this.remove();
   });
@@ -133,7 +131,6 @@ window.selectRating = function(value, questionId) {
   const inputField = document.getElementById(questionId);
   inputField.value = value;
 
-  // Obtener todos los elementos de estrellas dentro del mismo contenedor de la pregunta
   const stars = document.querySelectorAll(`#rating-${questionId.split('question')[1]} .star`);
   stars.forEach((star, index) => {
     if (index < value) {
@@ -145,9 +142,14 @@ window.selectRating = function(value, questionId) {
 }
 
 // Función para cerrar el popup
-function closePopup(modalId) {
-  const modal = new bootstrap.Modal(document.getElementById(modalId));
-  modal.hide();
+window.closePopup = function(modalId) {
+  const modalElement = document.getElementById(modalId);
+  if (modalElement) {
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+      modal.hide();
+    }
+  }
 }
 
 // Función para agregar los centros de salud al mapa y a la lista
@@ -166,9 +168,10 @@ data.zonas.forEach(zona => {
     listItem.className = 'list-group-item';
     listItem.textContent = centro.nombre;
     listItem.addEventListener('click', () => {
-      map.setView(marker.getLatLng(), 16);
+      map.setView([lat, lng], 16);
       marker.openPopup();
     });
+
     centrosSaludLista.appendChild(listItem);
   });
 });

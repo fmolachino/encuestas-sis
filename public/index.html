@@ -2,17 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Centros Salud</title>
+  <title>Sistema de Salud</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  
-  <style>
-    #map { height: 100vh; }
-  </style>
+  <!-- Tu archivo CSS -->
+  <link rel="stylesheet" href="./map.css">
 </head>
 <body>
-  <div id="map"></div>
-  <script type="module" src="./mapHandler.js"></script>
+  <div class="container-fluid">
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center py-3 border-bottom">
+      <div class="logo-container">
+        <img src="imagenes/Logo.jpeg" alt="Logo del Sistema de Salud" class="logo-img">
+      </div>
+      <h1 class="h4">Sistema de Salud</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="row mt-3">
+      <!-- Sidebar or Other Content -->
+      <div class="col-md-4">
+        <p>Información de los centros de salud y encuestas.</p>
+      </div>
+
+      <!-- Mapa -->
+      <div class="col-md-8">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script type="module" src="./mapHandler.js"></script>
 </body>
 </html>

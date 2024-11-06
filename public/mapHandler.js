@@ -18,8 +18,10 @@ const latlngs = [
   [-34.541, -58.655]
 ];
 
+const polygonColor = 'green';
+
 // Agregar el polígono al mapa
-let polygon = L.polygon(latlngs, { color: 'red' }).addTo(map);
+let polygon = L.polygon(latlngs, { color: polygonColor }).addTo(map);
 
 // Referencia al contenedor de la lista de centros de salud
 const centrosSaludLista = document.getElementById('centrosSalud');

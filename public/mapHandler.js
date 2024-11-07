@@ -12,11 +12,11 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Coordenadas del polígono
 const latlngs = [
-  [-34.541, -58.773],
-  [-34.486, -58.773],
-  [-34.484, -58.653],
-  [-34.541, -58.655]
-];
+        [-34.541, -58.773],
+        [-34.486, -58.773],
+        [-34.484, -58.653],
+        [-34.541, -58.655]
+      ];
 
 const polygonColor = 'green';
 
@@ -26,7 +26,7 @@ let polygon = L.polygon(latlngs, { color: polygonColor }).addTo(map);
 // Referencia al contenedor de la lista de centros de salud
 const centrosSaludLista = document.getElementById('centrosSalud');
 
-// Función para abrir la ventana modal de la atención
+// abrir la ventana modal de la atención
 window.openDetailModal = function(centerName) {
   const centro = data.zonas.flatMap(z => z.centros_salud).find(c => c.nombre === centerName);
   const atencion = centro.atencion;
@@ -61,7 +61,7 @@ window.openDetailModal = function(centerName) {
   });
 }
 
-// Función para abrir la ventana emergente de la encuesta
+// abrir la ventana emergente de la encuesta
 window.openSurveyPopup = function(centerName) {
   const surveyHtml = `
     <div class="modal fade" id="surveyModal" tabindex="-1" aria-labelledby="surveyModalLabel" aria-hidden="true">
@@ -87,9 +87,20 @@ window.openSurveyPopup = function(centerName) {
                   </span>
                 </div>
               `).join('')}
-              <button type="submit" class="btn btn-primary">Enviar</button>
+              <div class="form-group mt-3">
+                <label for="additionalComments">Comentarios adicionales:</label>
+                <textarea id="additionalComments" name="additionalComments" class="form-control" rows="3" placeholder="Escribe tus comentarios aquí..."></textarea>
+              </div>
+              </br>
+              <button type="button" class="btn btn-primary" onclick="previewSurvey()">Enviar</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </form>
+            <!-- Contenedor para la vista previa -->
+            <div id="previewContainer" class="mt-4" style="display: none;">
+              <h5>Vista Previa de Respuestas:</h5>
+              <div id="previewContent"></div>
+              <button type="button" class="btn btn-success mt-2" onclick="submitSurvey()">Cerrar</button>
+            </div>
           </div>
         </div>
       </div>
@@ -100,18 +111,135 @@ window.openSurveyPopup = function(centerName) {
   const surveyModal = new bootstrap.Modal(document.getElementById('surveyModal'));
   surveyModal.show();
 
-  document.getElementById('surveyForm').onsubmit = function(event) {
-    event.preventDefault();
-    alert('Gracias por su respuesta!');
-    closePopup('surveyModal');
-  };
+  document.getElementById('surveyModal').addEventListener('hidden.bs.modal', function () {
+    this.remove();
+  });
+}
+
+// mostrar la vista previa
+window.previewSurvey = function() {
+  const previewContainer = document.getElementById('previewContainer');
+  const previewContent = document.getElementById('previewContent');
+  
+  // Captura de las respuestas
+  let responsesHtml = '<ul>';
+  for (let i = 1; i <= 10; i++) {
+    const ratingValue = document.getElementById(`question${i}`).value || 'Sin respuesta';
+    responsesHtml += `<li><strong>Pregunta ${i}:</strong> ${ratingValue}</li>`;
+  }
+  const additionalComments = document.getElementById('additionalComments').value || 'Sin comentarios';
+  responsesHtml += `<li><strong>Comentarios adicionales:</strong> ${additionalComments}</li>`;
+  responsesHtml += '</ul>';
+
+  // Mostrar en el contenedor de vista previa
+  previewContent.innerHTML = responsesHtml;
+  previewContainer.style.display = 'block';
+}
+
+// enviar el formulario de encuesta
+window.submitSurvey = function() {
+  alert('Gracias por su respuesta!');
+  closePopup('surveyModal');
+}
+
+// abrir la ventana emergente de la encuesta
+window.openSurveyPopup = function(centerName) {
+  const surveyHtml = `
+    <div class="modal fade" id="surveyModal" tabindex="-1" aria-labelledby="surveyModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="surveyModalLabel">Encuesta de Atención en ${centerName}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="surveyForm">
+              ${[...Array(10)].map((_, index) => `
+                <div>
+                  <label>Pregunta ${index + 1}:</label>
+                  <div class="rating" id="rating-${index + 1}">
+                    ${[...Array(10)].map((_, num) => `
+                      <span class="star" onclick="selectRating(${num + 1}, 'question${index + 1}')">★</span>
+                    `).join('')}
+                  </div>
+                  <input type="hidden" id="question${index + 1}" name="question${index + 1}" required />
+                  <span class="rating-reference">
+                    ${getRatingReference(index + 1)}
+                  </span>
+                </div>
+              `).join('')}
+              <div class="form-group mt-3">
+                <label for="additionalComments">Comentarios adicionales:</label>
+                <textarea id="additionalComments" name="additionalComments" class="form-control" rows="3" placeholder="Escribe tus comentarios aquí..."></textarea>
+              </div>
+              </br>
+              <button type="button" class="btn btn-primary" onclick="previewSurvey()">Vista Previa</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Vista Previa -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="previewModalLabel">Vista Previa de Respuestas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="previewContent">
+            <!-- Aquí se mostrará la vista previa de las respuestas -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" onclick="submitSurvey()">Confirmar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', surveyHtml);
+  const surveyModal = new bootstrap.Modal(document.getElementById('surveyModal'));
+  surveyModal.show();
 
   document.getElementById('surveyModal').addEventListener('hidden.bs.modal', function () {
     this.remove();
   });
 }
 
-// Función para obtener la referencia de calificación
+// mostrar la vista previa en un modal separado
+window.previewSurvey = function() {
+  const previewContent = document.getElementById('previewContent');
+  
+  // Captura de las respuestas
+  let responsesHtml = '<ul>';
+  for (let i = 1; i <= 10; i++) {
+    const ratingValue = document.getElementById(`question${i}`).value || 'Sin respuesta';
+    responsesHtml += `<li><strong>Pregunta ${i}:</strong> ${ratingValue}</li>`;
+  }
+  const additionalComments = document.getElementById('additionalComments').value || 'Sin comentarios';
+  responsesHtml += `<li><strong>Comentarios adicionales:</strong> ${additionalComments}</li>`;
+  responsesHtml += '</ul>';
+
+  // Mostrar en el contenedor de vista previa
+  previewContent.innerHTML = responsesHtml;
+
+  // Abrir el modal de vista previa
+  const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+  previewModal.show();
+}
+
+// enviar el formulario de encuesta
+window.submitSurvey = function() {
+  alert('Gracias por su respuesta!');
+  closePopup('previewModal');
+  closePopup('surveyModal');
+}
+
+// obtener la referencia de calificación
 function getRatingReference(questionNumber) {
   const references = [
     '1 - Mucho tiempo, 10 - Muy poco tiempo',
@@ -128,7 +256,15 @@ function getRatingReference(questionNumber) {
   return references[questionNumber - 1];
 }
 
-// Función para seleccionar la calificación
+// auxiliar para cerrar el popup
+function closePopup(modalId) {
+  const modalElement = document.getElementById(modalId);
+  const modalInstance = bootstrap.Modal.getInstance(modalElement);
+  modalInstance.hide();
+}
+
+
+// seleccionar la calificación
 window.selectRating = function(value, questionId) {
   const inputField = document.getElementById(questionId);
   inputField.value = value;
@@ -143,7 +279,7 @@ window.selectRating = function(value, questionId) {
   });
 }
 
-// Función para cerrar el popup
+// cerrar el popup
 window.closePopup = function(modalId) {
   const modalElement = document.getElementById(modalId);
   if (modalElement) {
@@ -154,7 +290,7 @@ window.closePopup = function(modalId) {
   }
 }
 
-// Función para agregar los centros de salud al mapa y a la lista
+// agregar los centros de salud al mapa y a la lista
 data.zonas.forEach(zona => {
   zona.centros_salud.forEach(centro => {
     const [lat, lng] = centro.coordenadas;
